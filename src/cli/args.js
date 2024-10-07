@@ -1,4 +1,4 @@
-import process from "process";
+import process from 'node:process';
 
 const parseArgs = () => {
   const argv = process.argv;

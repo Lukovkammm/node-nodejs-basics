@@ -1,14 +1,15 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { __dirname } from './paths.js';
+import { rm } from 'node:fs/promises';
+import path from 'node:path';
+
+const dirname = import.meta.dirname;
 
 const remove = async () => {
-    const targetPath = path.join(__dirname, 'files/fileToRemove.txt')
+    const targetPath = path.join(dirname, 'files', 'fileToRemove.txt');
 
     try {
-        await fs.rm(targetPath)
+        await rm(targetPath); // *can be used unlink
     } catch (error) {
-        throw Error('FS operation failed')
+        throw new Error('FS operation failed')
     }
 };
 

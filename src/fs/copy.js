@@ -1,27 +1,18 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { __dirname } from './paths.js';
+import { readdir, cp } from 'node:fs/promises';
+import path from 'node:path';
+
+const dirname = import.meta.dirname;
 
 const copy = async () => {
-    const sourcePath = path.join(__dirname, 'files');
-    const targetPath = path.join(__dirname, 'files_copy');
+    const sourcePath = path.join(dirname, 'files');
+    const targetPath = path.join(dirname, 'files_copy');
 
     try {
-        const files = await fs.readdir(targetPath);
-        if (files.length) throw Error();
-    } catch (error) {
-        if (error.code !== 'ENOENT') {
-            console.log(error);
-            throw Error('FS operation failed');
-        }
-    }
-
-    try {
-        await fs.cp(sourcePath, targetPath, { errorOnExist: true, recursive: true });
+        await readdir(sourcePath);
+        await cp(sourcePath, targetPath, { errorOnExist: true, recursive: true, force: false });
     } catch (error) {
         console.log(error);
-        throw Error('FS operation failed');
-
+        throw new Error('FS operation failed');
     }
 };
 

@@ -1,24 +1,15 @@
-import { promises as fs } from "fs";
-import path from 'path';
-import { __dirname } from './paths.js';
+import { rename } from 'node:fs/promises';
+import path from 'node:path';
 
+const dirname = import.meta.dirname;
 const rename = async () => {
-    const sourcePath = path.join(__dirname, "files/wrongFilename.txt");
-    const targetPath = path.join(__dirname, "files/properFilename.md");
+    const sourcePath = path.join(dirname, 'files', 'wrongFilename.txt');
+    const targetPath = path.join(dirname, 'files', 'properFilename.md');
 
     try {
-        const targetStat = await fs.stat(targetPath);
-        if (targetStat) throw Error();
+        await rename(sourcePath, targetPath);
     } catch (error) {
-        if (error.code !== "ENOENT") {
-            throw Error("FS operation failed");
-        }
-    }
-
-    try {
-        await fs.rename(sourcePath, targetPath);
-    } catch (error) {
-        throw Error("FS operation failed");
+        throw new Error("FS operation failed");
     }
 };
 
